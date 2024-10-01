@@ -7,38 +7,30 @@ const PORT = process.env.PORT || 3000;
 const contactsFile = 'contacts.json';
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.text({ type: '*/*' })); // This will treat any type of incoming body as text
 
 // Serve HTML page displaying raw contact data
 app.get('/', async (req, res) => {
     try {
         const data = await fs.readFile(contactsFile, 'utf-8');
-        let contacts = JSON.parse(data || '[]');
-        res.json(contacts);
+        res.json(JSON.parse(data || '[]')); // Still output as JSON
     } catch (err) {
         console.error('Error reading contacts file:', err);
         res.status(500).send('Internal Server Error');
     }
 });
 
-// Endpoint to receive contact data
+// Endpoint to receive contact data, accepting any format
 app.post('/uploadcontacts', async (req, res) => {
-    const contacts = req.body; // This will now be an array of contacts
+    const rawContacts = req.body; // This will be the raw text of the request body
 
-    console.log("Received contacts batch:", JSON.stringify(contacts, null, 2));
+    console.log("Received raw data:", rawContacts);
 
     try {
-        const data = await fs.readFile(contactsFile, 'utf-8');
-        let existingContacts = JSON.parse(data || '[]');
-
-        // Add the new batch of contacts
-        existingContacts = existingContacts.concat(contacts);
-
-        await fs.writeFile(contactsFile, JSON.stringify(existingContacts, null, 2));
-        
-        console.log('Batch uploaded successfully');
-        res.status(200).send('Batch uploaded successfully');
+        // Append the raw data to a file without trying to parse it
+        await fs.writeFile(contactsFile, rawContacts, { flag: 'a' });
+        console.log('Raw data appended successfully');
+        res.status(200).send('Data received and appended successfully');
     } catch (err) {
         console.error('Error writing to contacts file:', err);
         res.status(500).send('Internal Server Error');
@@ -49,4 +41,3 @@ app.post('/uploadcontacts', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
-
