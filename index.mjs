@@ -24,21 +24,17 @@ app.get('/', async (req, res) => {
 
 // Endpoint to receive contact data
 app.post('/uploadcontacts', async (req, res) => {
-    const contact = req.body;
-    
-    console.log("Received contact:", JSON.stringify(contact, null, 2));
+    console.log("Received contact:", req.body);  // Log the raw body to debug
 
     try {
-        // Read existing contacts, add new contact
         const data = await fs.readFile(contactsFile, 'utf-8');
         let contacts = JSON.parse(data || '[]');
 
-        contacts.push(contact); // Add new contact
+        contacts.push(req.body); // Add new contact
 
-        // Write updated contacts back to the file
         await fs.writeFile(contactsFile, JSON.stringify(contacts, null, 2));
         
-        console.log('Contact uploaded successfully:', JSON.stringify(contact, null, 2));
+        console.log('Contact uploaded successfully');
         res.status(200).send('Contact uploaded successfully');
     } catch (err) {
         console.error('Error writing to contacts file:', err);
