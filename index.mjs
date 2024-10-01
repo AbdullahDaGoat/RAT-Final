@@ -9,7 +9,6 @@ const contactsFile = 'contacts.json';
 app.use(cors());
 app.use(express.text({ type: '*/*' })); 
 
-// Serve HTML page displaying raw contact data
 app.get('/', async (req, res) => {
     try {
         const data = await fs.readFile(contactsFile, 'utf-8');
