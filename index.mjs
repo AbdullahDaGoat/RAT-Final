@@ -21,7 +21,7 @@ app.get('/', async (req, res) => {
 
 // Endpoint to receive contact data, accepting any format
 app.post('/uploadcontacts', async (req, res) => {
-    const rawContacts = req.body; // This will be the raw text of the request body
+    const rawContacts = req.body; 
 
     console.log("Received raw data:", rawContacts);
 
