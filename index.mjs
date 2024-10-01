@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 1000;
 const contactsFile = 'contacts.json';
 
 app.use(cors());
-app.use(express.text({ type: '*/*' })); // This will treat any type of incoming body as text
+app.use(express.text({ type: '*/*' })); 
 
 // Serve HTML page displaying raw contact data
 app.get('/', async (req, res) => {
