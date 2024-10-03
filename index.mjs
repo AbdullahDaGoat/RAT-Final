@@ -12,7 +12,7 @@ app.use(express.text({ type: '*/*' }));
 app.get('/', async (req, res) => {
     try {
         const data = await fs.readFile(contactsFile, 'utf-8');
-        res.json(JSON.parse(data || '[]')); // Still output as JSON
+        res.json(JSON.parse(data || '[]')); 
     } catch (err) {
         res.status(500).send('Internal Server Error');
     }
