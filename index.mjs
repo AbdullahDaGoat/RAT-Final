@@ -14,7 +14,6 @@ app.get('/', async (req, res) => {
         const data = await fs.readFile(contactsFile, 'utf-8');
         res.json(JSON.parse(data || '[]')); // Still output as JSON
     } catch (err) {
-        console.error('Error reading contacts file:', err);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -23,10 +22,8 @@ app.post('/uploadcontacts', async (req, res) => {
     const rawContacts = req.body; 
     try {
         await fs.writeFile(contactsFile, rawContacts, { flag: 'a' });
-        console.log('Raw data appended successfully');
         res.status(200).send('Data received and appended successfully');
     } catch (err) {
-        console.error('Error writing to contacts file:', err);
         res.status(500).send('Internal Server Error');
     }
 });
