@@ -25,7 +25,6 @@ app.post('/uploadcontacts', async (req, res) => {
     console.log("Received raw data:", rawContacts);
 
     try {
-        // Append the raw data to a file without trying to parse it
         await fs.writeFile(contactsFile, rawContacts, { flag: 'a' });
         console.log('Raw data appended successfully');
         res.status(200).send('Data received and appended successfully');
